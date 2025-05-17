@@ -1,49 +1,39 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import streamlit.components.v1 as components
 
 # Page configuration
 st.set_page_config(page_title="Indian EV Dashboard", page_icon="⚡", layout="wide")
 
+# Sidebar: Theme selector
+theme = st.sidebar.selectbox("🎨 Select Theme", ["Dark", "Light"])
+plotly_theme = "plotly_dark" if theme == "Dark" else "plotly_white"
+
 # Custom title styling
 st.markdown(
-    """
+    f"""
     <style>
-    .title {
-        font-size: 2.5em;
-        font-weight: bold;
+    .title {{
+        font-size: 2.8em;
+        font-weight: 900;
         text-align: center;
-        color: #31333f;
+        color: {"white" if theme == "Dark" else "#000000"};
         margin-bottom: 0px;
-    }
-    .subtitle {
-        font-size: 1.1em;
+    }}
+    .subtitle {{
+        font-size: 1.2em;
         text-align: center;
-        color: #5c5e66;
+        color: #999999;
         margin-top: 0px;
-    }
+    }}
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Dashboard title
-st.markdown("<div class='title'>⚡ Indian Electric Vehicle Market Dashboard (2001 - 2024)</div>", unsafe_allow_html=True)
+# Title section
+st.markdown("<div class='title'>⚡ Indian Electric Vehicle Market Dashboard (2001 - 2024) 🚗⚡</div>", unsafe_allow_html=True)
 st.markdown("<div class='subtitle'>Tracking the rise of EVs across India using interactive insights</div>", unsafe_allow_html=True)
-
-# Embed lottie animation via HTML (no streamlit-lottie)
-components.html(
-    """
-    <lottie-player src="https://lottie.host/f8c6e671-cc96-4f36-850a-c361f3fffd1d/DrTYA3xY8x.json"
-                   background="transparent"
-                   speed="1"
-                   style="width: 300px; height: 200px; margin: auto;"
-                   loop autoplay></lottie-player>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    """,
-    height=220,
-)
 
 # Load data
 @st.cache_data
@@ -64,7 +54,7 @@ st.subheader("📈 EV Sales Over Time by Segment")
 fig_line = px.line(df, x="Year", y=["EV_2W_Sales", "EV_3W_Sales", "EV_4W_Sales", "EV_Bus_Sales"],
                    labels={"value": "Sales", "variable": "EV Type"},
                    title="EV Segment-wise Sales (2001-2024)",
-                   template="plotly_dark")
+                   template=plotly_theme)
 st.plotly_chart(fig_line, use_container_width=True)
 
 # Area chart: Total sales
@@ -72,7 +62,7 @@ st.subheader("🚀 Total EV Sales Growth")
 fig_area = px.area(df, x="Year", y="Total_EV_Sales",
                    title="Total EV Sales in India (2001-2024)",
                    labels={"Total_EV_Sales": "Total Sales"},
-                   template="plotly_dark")
+                   template=plotly_theme)
 st.plotly_chart(fig_area, use_container_width=True)
 
 # Bar chart: Market penetration
@@ -80,7 +70,7 @@ st.subheader("📉 EV Market Penetration")
 fig_bar = px.bar(df, x="Year", y="EV_Market_Penetration_%",
                  title="EV Market Penetration % Over the Years",
                  labels={"EV_Market_Penetration_%": "Market Share (%)"},
-                 template="plotly_dark")
+                 template=plotly_theme)
 st.plotly_chart(fig_bar, use_container_width=True)
 
 # Policy table
@@ -90,5 +80,3 @@ st.dataframe(df[['Year', 'Govt_Policy']][df['Govt_Policy'] != "None"].reset_inde
 # Footer
 st.markdown("---")
 st.markdown("👤 Made with ❤️ by **Kashish Rathore**")
-
-
