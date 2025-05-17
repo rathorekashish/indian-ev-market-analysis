@@ -4,23 +4,23 @@ import plotly.express as px
 from streamlit_lottie import st_lottie
 import requests
 
-# Page config
+# Page configuration
 st.set_page_config(page_title="Indian EV Dashboard", page_icon="⚡", layout="wide")
 
-# Load Lottie animation
+# Load Lottie animation from URL
 def load_lottieurl(url: str):
     try:
-        r = requests.get(url)
-        if r.status_code != 200:
+        response = requests.get(url)
+        if response.status_code != 200:
             return None
-        return r.json()
+        return response.json()
     except:
         return None
 
-# Working Lottie animation: Electric car charging
+# Working Lottie animation URL
 lottie_car = load_lottieurl("https://lottie.host/f8c6e671-cc96-4f36-850a-c361f3fffd1d/DrTYA3xY8x.json")
 
-# Custom CSS styles
+# Custom title styling
 st.markdown(
     """
     <style>
@@ -42,14 +42,15 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Title and animation
+# Dashboard title and animation
 st.markdown("<div class='title'>⚡ Indian Electric Vehicle Market Dashboard (2001 - 2024)</div>", unsafe_allow_html=True)
 st.markdown("<div class='subtitle'>Tracking the rise of EVs across India using interactive insights</div>", unsafe_allow_html=True)
 
+# Display animation
 if lottie_car:
     st_lottie(lottie_car, height=200, speed=1, loop=True)
 else:
-    st.warning("⚠️ Animation could not be loaded. Please check your connection or animation URL.")
+    st.warning("⚠️ EV animation could not be loaded. Please check the animation link or your connection.")
 
 # Load data
 @st.cache_data
@@ -65,15 +66,15 @@ col1.metric("2024 EV Sales", f"{df[df['Year'] == 2024]['Total_EV_Sales'].values[
 col2.metric("Market Penetration (2024)", f"{df[df['Year'] == 2024]['EV_Market_Penetration_%'].values[0]}%")
 col3.metric("2W Sales in 2024", f"{df[df['Year'] == 2024]['EV_2W_Sales'].values[0]:,}")
 
-# Line chart: EV Sales by type
+# Line chart: EV segment sales
 st.subheader("📈 EV Sales Over Time by Segment")
-fig = px.line(df, x="Year", y=["EV_2W_Sales", "EV_3W_Sales", "EV_4W_Sales", "EV_Bus_Sales"],
-              labels={"value": "Sales", "variable": "EV Type"},
-              title="EV Segment-wise Sales (2001-2024)",
-              template="plotly_dark")
-st.plotly_chart(fig, use_container_width=True)
+fig_line = px.line(df, x="Year", y=["EV_2W_Sales", "EV_3W_Sales", "EV_4W_Sales", "EV_Bus_Sales"],
+                   labels={"value": "Sales", "variable": "EV Type"},
+                   title="EV Segment-wise Sales (2001-2024)",
+                   template="plotly_dark")
+st.plotly_chart(fig_line, use_container_width=True)
 
-# Area chart: Total EV sales
+# Area chart: Total sales
 st.subheader("🚀 Total EV Sales Growth")
 fig_area = px.area(df, x="Year", y="Total_EV_Sales",
                    title="Total EV Sales in India (2001-2024)",
@@ -96,6 +97,8 @@ st.dataframe(df[['Year', 'Govt_Policy']][df['Govt_Policy'] != "None"].reset_inde
 # Footer
 st.markdown("---")
 st.markdown("👤 Made with ❤️ by **Kashish Rathore**")
+
+
 
 
 
