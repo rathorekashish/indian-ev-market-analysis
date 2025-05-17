@@ -1,0 +1,31 @@
+Line
+# Indian EV Market Dashboard
+""
+This Streamlit dashboard presents a visual analysis of the Indian Electric Vehicle (EV) market from 2001 to 2024.
+""
+## 📂 Project Structure
+- `app.py`: Main Streamlit app script
+- `indian_ev_market_2001_2024.csv`: Cleaned dataset used in the dashboard
+- `requirements.txt`: Python dependencies for the app
+""
+## 📈 Features
+"- EV sales by vehicle type (2W, 3W, 4W, Bus)"
+- Total EV sales trends over years
+- Market penetration percentage
+- Timeline of major government policies
+""
+## 🚀 How to Run
+```bash
+streamlit run app.py
+```
+""
+## 🛠 Requirements
+- Streamlit
+- pandas
+- plotly
+""
+## 📊 Data Source
+"Simulated based on reports by NITI Aayog, SIAM, and government policy documents."
+""
+## 📌 Author
+- [Your Name Here]
