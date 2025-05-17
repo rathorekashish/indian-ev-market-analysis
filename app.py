@@ -2,6 +2,31 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+# Page config
+st.set_page_config(page_title="Indian EV Dashboard", page_icon="⚡", layout="wide")
+
+# Add custom style
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #f0f2f6;
+    }
+    .title {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #31333f;
+    }
+    .subtitle {
+        font-size: 1.1em;
+        color: #5c5e66;
+        margin-bottom: 20px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Load data
 @st.cache_data
 def load_data():
@@ -10,7 +35,8 @@ def load_data():
 df = load_data()
 
 # Title
-st.title("🇮🇳 Indian Electric Vehicle Market Dashboard (2001 - 2024)")
+st.markdown("<div class='title'>⚡ Indian Electric Vehicle Market Dashboard (2001 - 2024)</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Explore the rise of EVs in India through interactive charts and insights.</div>", unsafe_allow_html=True)
 
 # Summary metrics
 st.subheader("📊 Key Metrics")
@@ -23,21 +49,24 @@ col3.metric("2W Sales in 2024", f"{df[df['Year']==2024]['EV_2W_Sales'].values[0]
 st.subheader("📈 EV Sales Over Time")
 fig = px.line(df, x="Year", y=["EV_2W_Sales", "EV_3W_Sales", "EV_4W_Sales", "EV_Bus_Sales"],
               labels={"value": "Sales", "variable": "EV Type"},
-              title="EV Segment-wise Sales (2001-2024)")
+              title="EV Segment-wise Sales (2001-2024)",
+              template="plotly_dark")
 st.plotly_chart(fig, use_container_width=True)
 
 # Area chart: Total EV sales
 st.subheader("📊 Total EV Sales Growth")
 fig_area = px.area(df, x="Year", y="Total_EV_Sales",
                    title="Total EV Sales in India (2001-2024)",
-                   labels={"Total_EV_Sales": "Total Sales"})
+                   labels={"Total_EV_Sales": "Total Sales"},
+                   template="plotly_dark")
 st.plotly_chart(fig_area, use_container_width=True)
 
 # Bar chart: Market penetration
 st.subheader("📉 EV Market Penetration")
 fig_bar = px.bar(df, x="Year", y="EV_Market_Penetration_%",
                  title="EV Market Penetration % Over the Years",
-                 labels={"EV_Market_Penetration_%": "Market Share (%)"})
+                 labels={"EV_Market_Penetration_%": "Market Share (%)"},
+                 template="plotly_dark")
 st.plotly_chart(fig_bar, use_container_width=True)
 
 # Policy Timeline
@@ -46,4 +75,5 @@ st.dataframe(df[['Year', 'Govt_Policy']][df['Govt_Policy'] != "None"].reset_inde
 
 # Footer
 st.markdown("---")
-st.markdown("Made with ❤️ by [Your Name] | Data from simulated estimates based on public reports")
+st.markdown("Made with ❤️ by **Kashish Rathore**")
+
