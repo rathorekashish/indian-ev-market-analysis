@@ -1,31 +1,47 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from streamlit_lottie import st_lottie
+import requests
 
 # Page config
 st.set_page_config(page_title="Indian EV Dashboard", page_icon="⚡", layout="wide")
 
-# Add custom style
+# Load Lottie animation from URL
+def load_lottieurl(url):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+lottie_car = load_lottieurl("https://lottie.host/3a3ff95e-e148-48cb-9d93-4a91e16f65cd/vZwYqv7iGj.json")
+
+# Custom CSS styles
 st.markdown(
     """
     <style>
-    body {
-        background-color: #f0f2f6;
-    }
     .title {
         font-size: 2.5em;
         font-weight: bold;
+        text-align: center;
         color: #31333f;
+        margin-bottom: 0px;
     }
     .subtitle {
         font-size: 1.1em;
+        text-align: center;
         color: #5c5e66;
-        margin-bottom: 20px;
+        margin-top: 0px;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
+
+# Title and animation
+st.markdown("<div class='title'>⚡ Indian Electric Vehicle Market Dashboard (2001 - 2024)</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Tracking the rise of EVs across India using interactive insights</div>", unsafe_allow_html=True)
+st_lottie(lottie_car, height=200, speed=1, loop=True)
 
 # Load data
 @st.cache_data
@@ -33,10 +49,6 @@ def load_data():
     return pd.read_csv("indian_ev_market_2001_2024.csv")
 
 df = load_data()
-
-# Title
-st.markdown("<div class='title'>⚡ Indian Electric Vehicle Market Dashboard (2001 - 2024)</div>", unsafe_allow_html=True)
-st.markdown("<div class='subtitle'>Explore the rise of EVs in India through interactive charts and insights.</div>", unsafe_allow_html=True)
 
 # Summary metrics
 st.subheader("📊 Key Metrics")
@@ -76,4 +88,5 @@ st.dataframe(df[['Year', 'Govt_Policy']][df['Govt_Policy'] != "None"].reset_inde
 # Footer
 st.markdown("---")
 st.markdown("Made with ❤️ by **Kashish Rathore**")
+
 
