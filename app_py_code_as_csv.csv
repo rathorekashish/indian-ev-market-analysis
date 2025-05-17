@@ -1,24 +1,10 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from streamlit_lottie import st_lottie
-import requests
+import streamlit.components.v1 as components
 
 # Page configuration
 st.set_page_config(page_title="Indian EV Dashboard", page_icon="⚡", layout="wide")
-
-# Load Lottie animation from URL
-def load_lottieurl(url: str):
-    try:
-        response = requests.get(url)
-        if response.status_code != 200:
-            return None
-        return response.json()
-    except:
-        return None
-
-# Working Lottie animation URL
-lottie_car = load_lottieurl("https://lottie.host/f8c6e671-cc96-4f36-850a-c361f3fffd1d/DrTYA3xY8x.json")
 
 # Custom title styling
 st.markdown(
@@ -42,15 +28,22 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Dashboard title and animation
+# Dashboard title
 st.markdown("<div class='title'>⚡ Indian Electric Vehicle Market Dashboard (2001 - 2024)</div>", unsafe_allow_html=True)
 st.markdown("<div class='subtitle'>Tracking the rise of EVs across India using interactive insights</div>", unsafe_allow_html=True)
 
-# Display animation
-if lottie_car:
-    st_lottie(lottie_car, height=200, speed=1, loop=True)
-else:
-    st.warning("⚠️ EV animation could not be loaded. Please check the animation link or your connection.")
+# Embed lottie animation via HTML (no streamlit-lottie)
+components.html(
+    """
+    <lottie-player src="https://lottie.host/f8c6e671-cc96-4f36-850a-c361f3fffd1d/DrTYA3xY8x.json"
+                   background="transparent"
+                   speed="1"
+                   style="width: 300px; height: 200px; margin: auto;"
+                   loop autoplay></lottie-player>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    """,
+    height=220,
+)
 
 # Load data
 @st.cache_data
@@ -97,10 +90,3 @@ st.dataframe(df[['Year', 'Govt_Policy']][df['Govt_Policy'] != "None"].reset_inde
 # Footer
 st.markdown("---")
 st.markdown("👤 Made with ❤️ by **Kashish Rathore**")
-
-    
-
-
-
-
-
